@@ -61,8 +61,8 @@ button:hover{filter:brightness(1.12)}button:active{transform:scale(.985)}button:
   <button id="draw" type="button">✦　一句、そして愛を抽出する　✦</button>
   <section class="result" id="result" aria-live="polite" aria-atomic="true">
     <div class="haiku" id="haiku"></div>
-    <div class="author" id="author"></div>
     <div class="extra" id="extra"></div>
+    <div class="author" id="author"></div>
   </section>
   <button id="share" type="button" hidden>✦　俳句を画像にしてXで共有　✦</button>
   <p id="shareStatus" class="note" aria-live="polite"></p>
@@ -186,7 +186,7 @@ async function shareHaiku(){
   try{
     const blob=await makeJpeg();
     const file=new File([blob],'575でチトセ愛.jpg',{type:'image/jpeg'});
-    const postText=`${current.poem.text}\n— ${current.authorName}\n${current.extra}\n\n#575でチトセ愛`;
+    const postText=`${current.poem.text}\n${current.extra}\n— ${current.authorName}\n\n#575でチトセ愛`;
     if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
       await navigator.share({files:[file],title:'575でチトセ愛',text:postText});
       status.textContent='共有メニューからXを選んで投稿してね。';
