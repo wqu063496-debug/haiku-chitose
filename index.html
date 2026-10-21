@@ -74,8 +74,8 @@ button:hover{filter:brightness(1.12)}button:active{transform:scale(.985)}button:
   <div class="nium-panel">
     <div class="nium-kicker">★ RARE EVENT : 1 / 100 ★</div>
     <h2 id="niumTitle">チトセニウムが発生した！</h2>
-    <p id="niumIntro">星空に未知の輝きが出現！<br>10秒以内にチトセニウムを集めよう。<br>光る結晶をタップして回収！</p>
-    <div class="nium-stats"><span>回収数：<b id="niumScore">0</b> / 10</span><span>残り：<b id="niumTime">10</b>秒</span></div>
+    <p id="niumIntro">星空に未知の輝きが出現！<br>8秒以内にチトセニウムを集めよう。<br>光る結晶をタップして回収！</p>
+    <div class="nium-stats"><span>回収数：<b id="niumScore">0</b> / 10</span><span>残り：<b id="niumTime">8</b>秒</span></div>
     <div class="nium-board" id="niumBoard" aria-label="光るチトセニウムをタップするゲーム">
       <button id="niumTarget" type="button" aria-label="チトセニウムを回収">✦</button>
     </div>
@@ -209,16 +209,16 @@ async function shareHaiku(){
 const niumOverlay = document.getElementById('niumOverlay');
 const niumTarget = document.getElementById('niumTarget');
 const niumBoard = document.getElementById('niumBoard');
-let niumScore = 0, niumTime = 10, niumTimer = null, niumMover = null, niumPlaying = false;
+let niumScore = 0, niumTime = 8, niumTimer = null, niumMover = null, niumPlaying = false;
 function openNiumEvent(){
   stopNiumGame();
   niumOverlay.classList.add('open');
   document.getElementById('niumTitle').textContent = 'チトセニウムが発生した！';
-  document.getElementById('niumIntro').innerHTML = '星空に未知の輝きが出現！<br>10秒以内にチトセニウムを集めよう。<br>光る結晶をタップして回収！';
+  document.getElementById('niumIntro').innerHTML = '星空に未知の輝きが出現！<br>8秒以内にチトセニウムを集めよう。<br>光る結晶をタップして回収！';
   document.getElementById('niumMessage').textContent = '準備ができたらゲームスタート！';
   document.getElementById('niumStart').textContent = 'ゲームスタート';
   document.getElementById('niumScore').textContent = '0';
-  document.getElementById('niumTime').textContent = '10';
+  document.getElementById('niumTime').textContent = '8';
   niumTarget.style.display = 'none';
 }
 function stopNiumGame(){
@@ -240,12 +240,12 @@ function endNiumGame(won){
   document.getElementById('niumStart').textContent = 'もう一度遊ぶ';
 }
 function startNiumGame(){
-  stopNiumGame(); niumScore=0; niumTime=15; niumPlaying=true;
+  stopNiumGame(); niumScore=0; niumTime=8; niumPlaying=true;
   document.getElementById('niumScore').textContent='0';
-  document.getElementById('niumTime').textContent='10';
+  document.getElementById('niumTime').textContent='8';
   document.getElementById('niumMessage').textContent='光る結晶をすばやくタップ！';
   document.getElementById('niumTitle').textContent='チトセニウムを集めろ！';
-  document.getElementById('niumIntro').textContent='10秒で10個集めたら成功！';
+  document.getElementById('niumIntro').textContent='8秒で10個集めたら成功！';
   niumTarget.style.display='flex'; moveNiumTarget();
   niumMover=setInterval(moveNiumTarget,850);
   niumTimer=setInterval(()=>{
