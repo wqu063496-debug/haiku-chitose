@@ -1,271 +1,209 @@
+
 <!doctype html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#090d2b">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080d25">
 <title>俳句を作ろう</title>
 <style>
-:root{--ink:#f7f2ff;--muted:#c5c6ed;--pink:#ffb8e7;--gold:#ffe8a3;--glass:rgba(18,22,66,.72)}
+:root{color-scheme:dark;--ink:#f5f3ff;--muted:#c7c9e8;--gold:#ffe8a3;--panel:rgba(14,20,55,.78)}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;color:var(--ink);font-family:"Hiragino Mincho ProN","Yu Mincho",serif;background:radial-gradient(ellipse at 18% 18%,rgba(111,91,190,.45),transparent 35%),radial-gradient(ellipse at 85% 72%,rgba(99,53,146,.35),transparent 36%),linear-gradient(145deg,#06091e,#111943 55%,#24133d);overflow-x:hidden;position:relative}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(2px 2px at 12% 22%,#fff 98%,transparent),radial-gradient(1px 1px at 78% 18%,#fff 98%,transparent),radial-gradient(2px 2px at 66% 61%,#fff 98%,transparent),radial-gradient(1px 1px at 30% 75%,#fff 98%,transparent),radial-gradient(1.5px 1.5px at 90% 43%,#ffe8a3 98%,transparent),radial-gradient(1px 1px at 45% 9%,#fff 98%,transparent),radial-gradient(1.5px 1.5px at 8% 88%,#fff 98%,transparent),radial-gradient(1px 1px at 56% 90%,#fff 98%,transparent);background-size:320px 260px;opacity:.9;animation:twinkle 5s ease-in-out infinite alternate}
-body:after{content:"☾";position:fixed;top:4%;right:8%;font-size:clamp(48px,9vw,90px);color:#fff0b9;text-shadow:0 0 24px rgba(255,232,163,.55);transform:rotate(-18deg);pointer-events:none}
-main{width:min(720px,100%);position:relative;z-index:1;border:1px solid rgba(202,196,255,.45);border-radius:24px;padding:clamp(24px,6vw,52px);background:linear-gradient(145deg,rgba(24,30,83,.86),rgba(24,14,57,.82));box-shadow:0 0 45px rgba(130,112,255,.16),inset 0 0 32px rgba(186,159,255,.06);backdrop-filter:blur(8px)}
-main:before{content:"✦  星空俳句 ✦";position:absolute;top:16px;right:18px;color:var(--gold);font-size:11px;letter-spacing:.15em;opacity:.9}
-h1{text-align:center;font-size:clamp(30px,7vw,49px);letter-spacing:.12em;margin:10px 0 12px;color:#fff5ff;text-shadow:0 0 18px rgba(255,184,231,.45)}
-.intro{text-align:center;color:var(--muted);margin:0 0 30px;font-size:14px;line-height:1.8}
-label{display:block;font-weight:bold;margin-bottom:9px;color:#f0ddff;font-size:14px}
-input{width:100%;padding:14px 15px;border:1px solid rgba(206,198,255,.5);border-radius:12px;background:rgba(5,9,35,.65);color:white;font:inherit;font-size:16px;outline:none}
-input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,184,231,.13)}
-input::placeholder{color:#a6a8d0}
-button{margin-top:16px;width:100%;padding:16px 12px;border:1px solid rgba(255,255,255,.35);border-radius:13px;background:linear-gradient(100deg,#7068d8,#b56bb8 58%,#e58abf);color:white;font:inherit;font-weight:bold;font-size:16px;letter-spacing:.07em;cursor:pointer;touch-action:manipulation; -webkit-tap-highlight-color:transparent;box-shadow:0 7px 22px rgba(116,86,209,.25);transition:transform .12s,filter .12s}
-button:hover{filter:brightness(1.12)}button:active{transform:scale(.985)}button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-.result{margin-top:27px;padding:25px 16px 22px;min-height:220px;border:1px solid rgba(207,196,255,.3);border-radius:18px;background:rgba(6,10,37,.42);display:none}
-.result.show{display:block;animation:appear .4s ease-out}
-.haiku{white-space:pre-line;text-align:center;font-family:"Yuji Syuku","Klee One","Hiragino Mincho ProN","Yu Mincho",cursive;font-style:italic;font-size:clamp(25px,5.4vw,37px);line-height:1.9;letter-spacing:.14em;color:#fff8ff;text-shadow:0 0 16px rgba(199,184,255,.2);transform:rotate(-1deg)}
-.author{text-align:right;margin:24px 8px 0;color:var(--gold);font-family:"Yuji Syuku","Klee One","Hiragino Mincho ProN","Yu Mincho",cursive;font-style:italic;font-size:16px;letter-spacing:.1em;transform:rotate(-2deg)}
-.extra{white-space:pre-line;margin:23px auto 0;max-width:100%;width:fit-content;color:var(--pink);font-family:"Yuji Syuku","Klee One","Hiragino Kaku Gothic ProN","Yu Gothic",cursive;font-weight:900;font-size:clamp(17px,4vw,24px);line-height:1.6;text-align:center;transform:rotate(-2deg);text-shadow:1px 1px 0 #4c286e,0 0 15px rgba(255,184,231,.18);overflow-wrap:anywhere}
-.note{text-align:center;font-size:11px;color:#a6a9d6;margin:20px 0 0;line-height:1.7}
-.starline{text-align:center;color:#d8c9ff;letter-spacing:.6em;margin-top:20px;opacity:.8}
-@keyframes appear{from{opacity:0;transform:translateY(9px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes twinkle{from{opacity:.55}to{opacity:1}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
-
-/* Rare event + mobile mini-game */
-#niumOverlay{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(3,5,24,.88);backdrop-filter:blur(10px)}
-#niumOverlay.open{display:flex;animation:appear .35s ease-out}
-.nium-panel{width:min(560px,100%);max-height:94dvh;overflow:auto;border:1px solid rgba(255,224,255,.55);border-radius:24px;padding:clamp(18px,4vw,30px);text-align:center;background:radial-gradient(ellipse at 50% 0%,rgba(149,93,255,.38),transparent 55%),linear-gradient(145deg,#151946,#281144);box-shadow:0 0 55px rgba(196,94,255,.35)}
-.nium-kicker{color:#ffe8a3;letter-spacing:.18em;font-size:12px}
-.nium-panel h2{font-size:clamp(26px,7vw,40px);line-height:1.35;margin:10px 0;color:#fff5ff;text-shadow:0 0 20px #d66bff}
-.nium-panel p{color:#d9d9ff;line-height:1.65}
-.nium-board{height:min(42dvh,300px);min-height:220px;position:relative;overflow:hidden;border:1px solid rgba(215,197,255,.4);border-radius:18px;background:radial-gradient(ellipse at 50% 45%,rgba(113,87,216,.3),transparent 65%),#090e30;touch-action:manipulation;isolation:isolate}
-.nium-board:before{content:"✦  ·  ✧     ·     ✦     ·  ✧";position:absolute;inset:15px;color:rgba(255,255,255,.35);letter-spacing:.5em;line-height:3;pointer-events:none;overflow:hidden}
-#niumTarget{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;border:1px solid #fff1b8;background:radial-gradient(circle at 35% 30%,#fffbe2,#f9a7ff 35%,#8058ff 72%);box-shadow:0 0 18px #f5a9ff,0 0 42px rgba(176,111,255,.8);font-size:32px;display:none;align-items:center;justify-content:center;padding:0;margin:0;z-index:2;animation:niumPulse .8s ease-in-out infinite alternate}
-@keyframes niumPulse{from{filter:brightness(.9);scale:.92}to{filter:brightness(1.3);scale:1.08}}
-.nium-stats{display:flex;justify-content:space-between;gap:8px;margin:12px 0;color:#ffe8a3;font-weight:bold}
-.nium-actions{display:flex;gap:10px}
-.nium-actions button{flex:1;margin-top:12px}
-.nium-secondary{background:rgba(255,255,255,.09);box-shadow:none}
-#niumMessage{min-height:3em;margin:10px 0 0;font-weight:bold;color:#ffd7f5}
-@media(max-height:650px){.nium-panel{padding:14px}.nium-board{height:34dvh;min-height:170px}.nium-panel h2{font-size:25px}}
-
+body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Yu Gothic",Meiryo,sans-serif;color:var(--ink);background:radial-gradient(ellipse at 50% 0%,#26366c 0,#111a42 35%,#070b20 78%);overflow-x:hidden}
+#stars{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.wrap{width:min(760px,92vw);margin:0 auto;padding:36px 0 56px}
+.hero{text-align:center;padding:22px 10px 14px}
+h1{font-size:clamp(2rem,7vw,3.4rem);letter-spacing:.08em;margin:0 0 12px;text-shadow:0 0 22px #9eaaff}
+.intro{line-height:1.9;color:#e0e5ff;margin:0 auto 20px}
+.panel{background:var(--panel);border:1px solid #7f8ad6a8;border-radius:24px;padding:clamp(18px,5vw,32px);box-shadow:0 18px 60px #0005;backdrop-filter:blur(9px);margin:18px 0}
+.small{font-size:.9rem;color:var(--muted)}
+.label{display:block;margin:12px 0 7px;font-weight:700}
+input{width:100%;padding:13px 14px;border-radius:12px;border:1px solid #9ba8ef;background:#090f2c;color:white;font:inherit}
+button{font:inherit;font-weight:750;border:0;border-radius:999px;padding:12px 20px;cursor:pointer;transition:transform .15s,filter .15s}
+button:hover{filter:brightness(1.1);transform:translateY(-1px)}
+button:focus-visible,input:focus-visible{outline:3px solid #ffe8a3;outline-offset:3px}
+.primary{background:linear-gradient(135deg,#ffe8a3,#f5b8e9);color:#171633;box-shadow:0 5px 22px #d5b4ff44}
+.secondary{background:#242f65;color:white;border:1px solid #8290e8}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.poem{font-size:clamp(1.35rem,5vw,2rem);font-weight:750;line-height:1.9;text-align:center;white-space:pre-line;min-height:120px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff5ce}
+.author{text-align:right;color:#d6d9ff;margin-top:12px}
+.love{white-space:pre-line;text-align:center;font-size:1.2rem;line-height:1.8;color:#ffdce9;margin-top:18px}
+.hidden{display:none!important}
+.notice{border:1px solid #ffe8a3;border-radius:16px;padding:16px;text-align:center;background:#3a2c58;color:#fff2c7;margin-top:16px}
+.game-area{height:230px;position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(#111c4c,#25205a);border:1px solid #7c8be4;margin-top:14px;touch-action:manipulation}
+.ore{position:absolute;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;font-size:2rem;background:radial-gradient(circle at 35% 25%,#fff,#8ef8ff 25%,#7664ff 62%,#25235c);box-shadow:0 0 24px #8cfbff;cursor:pointer;user-select:none}
+.score{text-align:center;font-size:1.1rem;margin:10px}
+.footer{text-align:center;color:#9da7d9;font-size:.82rem;margin-top:28px}
 </style>
 </head>
 <body>
-<main>
-  <h1>俳句を作ろう</h1>
-  <p class="intro">星空の下で名句をひとつ。<br>そして今日も、チトセさんへの愛は字余り。</p>
-  <label for="authorName">最後に表示する自分の名前（署名）</label>
-  <input id="authorName" value="" maxlength="30" placeholder="あなたの名前を入力" autocomplete="name" enterkeyhint="go">
-  <button id="draw" type="button">✦　一句、そして愛を抽出する　✦</button>
-  <section class="result" id="result" aria-live="polite" aria-atomic="true">
-    <div class="haiku" id="haiku"></div>
-    <div class="extra" id="extra"></div>
-    <div class="author" id="author"></div>
-  </section>
-  <button id="share" type="button" hidden>✦　俳句を画像にしてXで共有　✦</button>
-  <p id="shareStatus" class="note" aria-live="polite"></p>
-  <div class="starline" aria-hidden="true">✧ · ˚　✦　˚ · ✧</div>
-  <p class="note">※季節の言葉を取り入れたオリジナル風の俳句を抽選。<br>画像にしてXで共有できます。</p>
-</main>
+<canvas id="stars" aria-hidden="true"></canvas>
+<main class="wrap">
+<header class="hero">
+<h1>俳句を作ろう</h1>
+<p class="intro">五・七・五で、今日の気持ちを詠んでみよう。<br>そして今日も、チトセさんへの愛は字余り。</p>
+</header>
 
-<div id="niumOverlay" role="dialog" aria-modal="true" aria-labelledby="niumTitle">
-  <div class="nium-panel">
-    <div class="nium-kicker">★ RARE EVENT : 1 / 100 ★</div>
-    <h2 id="niumTitle">チトセニウムが発生した！</h2>
-    <p id="niumIntro">星空に未知の輝きが出現！<br>15秒以内にチトセニウムを集めよう。<br>光る結晶をタップして回収！</p>
-    <div class="nium-stats"><span>回収数：<b id="niumScore">0</b> / 10</span><span>残り：<b id="niumTime">15</b>秒</span></div>
-    <div class="nium-board" id="niumBoard" aria-label="光るチトセニウムをタップするゲーム">
-      <button id="niumTarget" type="button" aria-label="チトセニウムを回収">✦</button>
-    </div>
-    <p id="niumMessage" aria-live="polite">準備ができたらゲームスタート！</p>
-    <div class="nium-actions"><button id="niumStart" type="button">ゲームスタート</button><button id="niumClose" class="nium-secondary" type="button">閉じる</button></div>
-  </div>
+<section class="panel">
+<p class="small">ボタンを押すと、星空の下で一句が生まれます。</p>
+<label class="label" for="authorName">俳句の作者名（任意）</label>
+<input id="authorName" maxlength="24" placeholder="名前を入力（空欄でもOK）" autocomplete="nickname">
+<div class="actions"><button class="primary" id="drawBtn">俳句を作る</button></div>
+
+<div id="poemArea" class="hidden" aria-live="polite">
+<div class="poem" id="poem"></div>
+<div class="author" id="signature"></div>
+<div class="love" id="love"></div>
+<div class="actions">
+<button class="secondary" id="againBtn">もう一度作る</button>
+<button class="secondary" id="shareBtn">画像を作って共有</button>
+</div>
 </div>
 
+<div id="rareNotice" class="notice hidden">
+<strong>✨ チトセニウムが発生した！ ✨</strong>
+<p>タップしてチトセニウムを集めよう！</p>
+<button class="primary" id="startGame">ミニゲーム開始</button>
+</div>
+</section>
+
+<section id="gamePanel" class="panel hidden">
+<h2 style="text-align:center">チトセニウム採集ゲーム</h2>
+<p class="small" style="text-align:center">光るチトセニウムをタップ！ 制限時間内にたくさん集めよう。</p>
+<div class="score">残り <b id="time">15</b> 秒　｜　収集数 <b id="score">0</b></div>
+<div class="game-area" id="gameArea" aria-label="チトセニウムをタップするエリア"></div>
+<p id="gameResult" class="love"></p>
+<div class="actions"><button class="secondary" id="retryGame">もう一度遊ぶ</button></div>
+</section>
+
+<footer class="footer">星空の下で、あなたの一句を。</footer>
+</main>
+
 <script>
-'use strict';
-const poems = [
-  {text:"星月夜\n君の名前を\nそっと書く",season:"秋"},
-  {text:"流れ星\nチトセの声に\n夜が澄む",season:"秋"},
-  {text:"春の風\n君の笑顔が\n花になる",season:"春"},
-  {text:"夏の夜\n星を数えて\n君想う",season:"夏"},
-  {text:"夕焼けに\n君の面影\n風やさし",season:"夏"},
-  {text:"冬銀河\n君の言葉が\n灯となる",season:"冬"},
-  {text:"月冴えて\n君の美声の\n余韻かな",season:"冬"},
-  {text:"花明かり\n君の笑顔に\n春うらら",season:"春"},
-  {text:"天の川\n遠く近くに\n君想う",season:"夏"},
-  {text:"秋の星\n君の名前を\n風に乗せ",season:"秋"},
-  {text:"初雪や\n君のかわいさ\nまた増える",season:"冬"},
-  {text:"夜桜に\n君の笑顔が\n咲いている",season:"春"}
-];
-const extras = [
-  "それでも宵谷チトセは\n可愛い（字余り）",
-  "それはともかく宵谷チトセは\n今日もメロい（字余り）",
-  "そんなときにも響く\nチトセの美声（字余り）"
-];
-let current = null;
-function draw(){
-  const poem = poems[Math.floor(Math.random()*poems.length)];
-  const extra = extras[Math.floor(Math.random()*extras.length)];
-  const authorName = document.getElementById('authorName').value.trim() || '名無し';
-  current = {poem, extra, authorName};
-  document.getElementById('haiku').textContent = poem.text;
-  document.getElementById('author').textContent = '— ' + authorName;
-  document.getElementById('extra').textContent = extra;
-  const result = document.getElementById('result');
-  result.classList.remove('show');
-  void result.offsetWidth;
-  result.classList.add('show');
-  document.getElementById('share').hidden = false;
-  document.getElementById('shareStatus').textContent = '';
-  // 100分の1の確率でチトセニウム発生イベント
-  if (Math.random() < 0.01) openNiumEvent();
+const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');let stars=[];
+function makeStars(){
+ canvas.width=innerWidth*devicePixelRatio;
+ canvas.height=innerHeight*devicePixelRatio;
+ canvas.style.width=innerWidth+'px';
+ canvas.style.height=innerHeight+'px';
+ ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+ stars=Array.from({length:Math.min(180,Math.floor(innerWidth/5))},()=>({
+  x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+  r:Math.random()*1.5+.25,a:Math.random()*.7+.2,phase:Math.random()*6
+ }));
 }
+function drawStars(){
+ ctx.clearRect(0,0,innerWidth,innerHeight);
+ const t=Date.now()/900;
+ for(const s of stars){
+  ctx.globalAlpha=s.a*(.65+.35*Math.sin(t+s.phase));
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+ }
+ ctx.globalAlpha=1;requestAnimationFrame(drawStars);
+}
+addEventListener('resize',makeStars);makeStars();drawStars();
 
-function roundedRect(ctx,x,y,w,h,r){
-  ctx.beginPath(); ctx.roundRect(x,y,w,h,r);
-}
-function drawWrapped(ctx,text,x,y,maxWidth,lineHeight){
-  let line='';
-  for(const char of text){
-    const test=line+char;
-    if(ctx.measureText(test).width>maxWidth && line){ctx.fillText(line,x,y);line=char;y+=lineHeight;}else{line=test;}
-  }
-  if(line) ctx.fillText(line,x,y);
-  return y;
-}
-function makeJpeg(){
-  return new Promise((resolve,reject)=>{
-    if(!current){draw();}
-    const canvas=document.createElement('canvas');
-    canvas.width=1200; canvas.height=1500;
-    const ctx=canvas.getContext('2d');
-    const g=ctx.createLinearGradient(0,0,1200,1500);
-    g.addColorStop(0,'#070d2d'); g.addColorStop(.55,'#20245d'); g.addColorStop(1,'#35184d');
-    ctx.fillStyle=g; ctx.fillRect(0,0,1200,1500);
-    // Nebulae
-    for(let i=0;i<8;i++){
-      const x=(i*197+83)%1200, y=(i*263+190)%1500;
-      const rg=ctx.createRadialGradient(x,y,2,x,y,260);
-      rg.addColorStop(0,'rgba(175,112,230,0.24)'); rg.addColorStop(1,'rgba(175,112,230,0)');
-      ctx.fillStyle=rg;ctx.fillRect(x-260,y-260,520,520);
-    }
-    // Stars
-    let seed=8173; const rand=()=>{seed=(seed*9301+49297)%233280;return seed/233280;};
-    for(let i=0;i<190;i++){
-      const x=rand()*1200,y=rand()*1500,r=rand()*2.8+.7;
-      ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=i%9===0?'#ffe9aa':'rgba(255,255,255,.88)';ctx.fill();
-    }
-    ctx.fillStyle='#fff0b6';ctx.font='100px serif';ctx.fillText('☾',965,155);
-    ctx.textAlign='center';
-    ctx.fillStyle='#fff4ff';ctx.shadowColor='#d6aaff';ctx.shadowBlur=24;
-    ctx.font='bold 68px serif';ctx.fillText('俳句を作ろう',600,145);ctx.shadowBlur=0;
-    ctx.fillStyle='#d5d8ff';ctx.font='30px serif';ctx.fillText('星空の下で、ひと句の恋を。',600,205);
-    // Paper card
-    const card=ctx.createLinearGradient(180,300,1020,1220);card.addColorStop(0,'#fff9ed');card.addColorStop(1,'#d9dcff');
-    roundedRect(ctx,125,270,950,950,28);ctx.fillStyle=card;ctx.fill();
-    ctx.strokeStyle='rgba(255,255,255,.75)';ctx.lineWidth=4;ctx.stroke();
-    ctx.fillStyle='#252344';ctx.textAlign='center';ctx.font='italic 58px \"Yuji Syuku\", \"Klee One\", cursive';
-    const lines=current.poem.text.split('\n');
-    let py=470;for(const line of lines){ctx.fillText(line,600,py);py+=105;}
-    ctx.fillStyle='#bd438f';ctx.font='italic bold 40px \"Yuji Syuku\", \"Klee One\", cursive';
-    const extraLines=current.extra.split('\n');
-    let ey=py+105;for(const l of extraLines){ctx.fillText(l,600,ey);ey+=55;}
-    ctx.save();ctx.translate(600,Math.min(ey+58,1160));ctx.rotate(-0.035);ctx.textAlign='right';ctx.fillStyle='#655a86';ctx.font='italic 34px \"Yuji Syuku\", \"Klee One\", cursive';ctx.fillText('— '+current.authorName,350,0);ctx.restore();
-    ctx.fillStyle='#fff1b5';ctx.font='34px serif';ctx.fillText('✧  また、別の一句で恋をしよう  ✧',600,1355);
-    canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('JPEGの作成に失敗しました')), 'image/jpeg', .94);
-  });
-}
-async function shareHaiku(){
-  const status=document.getElementById('shareStatus');
-  const btn=document.getElementById('share');
-  if(!current){draw();}
-  btn.disabled=true;btn.textContent='画像を作成中…';
-  try{
-    const blob=await makeJpeg();
-    const file=new File([blob],'575でチトセ愛.jpg',{type:'image/jpeg'});
-    const postText=`${current.poem.text}\n— ${current.authorName}\n${current.extra}\n\n#575でチトセ愛`;
-    if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
-      await navigator.share({files:[file],title:'575でチトセ愛',text:postText});
-      status.textContent='共有メニューからXを選んで投稿してね。';
-    }else{
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement('a');a.href=url;a.download='575でチトセ愛.jpg';document.body.appendChild(a);a.click();a.remove();
-      const intent='https://twitter.com/intent/tweet?text='+encodeURIComponent(postText);
-      window.open(intent,'_blank','noopener,noreferrer');
-      status.textContent='JPEGを保存してXの投稿画面を開いたよ。画像を添付して投稿してね（ブラウザの仕様上、自動添付できない場合があります）。';
-      setTimeout(()=>URL.revokeObjectURL(url),60000);
-    }
-  }catch(err){
-    if(err.name!=='AbortError') status.textContent='共有できなかったため、もう一度試してね。';
-  }finally{
-    btn.disabled=false;btn.textContent='✦　俳句を画像にしてXで共有　✦';
-  }
-}
+const poems=[
+ '風吹けば\n星に願いを\nそっと乗せ',
+ '夜空には\n君の笑顔が\n星明かり',
+ '月明かり\n心の一句\n君に詠む',
+ '秋の夜\n言葉を探す\n星の下'
+];
 
-// チトセニウム発生：スマートフォンでも遊べるタップゲーム
-const niumOverlay = document.getElementById('niumOverlay');
-const niumTarget = document.getElementById('niumTarget');
-const niumBoard = document.getElementById('niumBoard');
-let niumScore = 0, niumTime = 15, niumTimer = null, niumMover = null, niumPlaying = false;
-function openNiumEvent(){
-  stopNiumGame();
-  niumOverlay.classList.add('open');
-  document.getElementById('niumTitle').textContent = 'チトセニウムが発生した！';
-  document.getElementById('niumIntro').innerHTML = '星空に未知の輝きが出現！<br>15秒以内にチトセニウムを集めよう。<br>光る結晶をタップして回収！';
-  document.getElementById('niumMessage').textContent = '準備ができたらゲームスタート！';
-  document.getElementById('niumStart').textContent = 'ゲームスタート';
-  document.getElementById('niumScore').textContent = '0';
-  document.getElementById('niumTime').textContent = '15';
-  niumTarget.style.display = 'none';
+const loves=[
+ 'それでも宵谷チトセは\n可愛い（字余り）',
+ 'それはともかく宵谷チトセは\n今日もメロい（字余り）',
+ 'そんなときにも響く\nチトセの美声（字余り）'
+];
+
+let rare=false,gameTimer=null,score=0,timeLeft=15;
+
+function drawPoem(){
+ const p=poems[Math.floor(Math.random()*poems.length)];
+ document.getElementById('poem').textContent=p.replaceAll('恋','愛');
+ document.getElementById('signature').textContent='— '+(document.getElementById('authorName').value.trim()||'名もなき詠み人');
+ document.getElementById('love').textContent=loves[Math.floor(Math.random()*loves.length)].replaceAll('恋','愛');
+ document.getElementById('poemArea').classList.remove('hidden');
+ document.getElementById('rareNotice').classList.add('hidden');
+ document.getElementById('gamePanel').classList.add('hidden');
+ rare=Math.floor(Math.random()*100)===0;
+ if(rare)document.getElementById('rareNotice').classList.remove('hidden');
 }
-function stopNiumGame(){
-  clearInterval(niumTimer); clearInterval(niumMover);
-  niumTimer = null; niumMover = null; niumPlaying = false;
+document.getElementById('drawBtn').addEventListener('click',drawPoem);
+document.getElementById('againBtn').addEventListener('click',drawPoem);
+
+function startGame(){
+ document.getElementById('gamePanel').classList.remove('hidden');
+ document.getElementById('gameResult').textContent='';
+ document.getElementById('gameArea').innerHTML='';
+ score=0;timeLeft=15;updateScore();spawnOre();clearInterval(gameTimer);
+ gameTimer=setInterval(()=>{
+  timeLeft--;updateScore();
+  if(timeLeft<=0){
+   clearInterval(gameTimer);document.getElementById('gameArea').innerHTML='';
+   const win=score>=10;
+   document.getElementById('gameResult').textContent=win?'🎉 称号獲得：チトセニウム収集家！':'終了！ '+score+'個集めたよ。10個以上で称号ゲット！';
+   if(win)localStorage.setItem('chitoseCollector','true');
+  }
+ },1000);
+ document.getElementById('gamePanel').scrollIntoView({behavior:'smooth',block:'center'});
 }
-function moveNiumTarget(){
-  const maxX = Math.max(0, niumBoard.clientWidth - 82);
-  const maxY = Math.max(0, niumBoard.clientHeight - 82);
-  niumTarget.style.left = (8 + Math.random()*maxX) + 'px';
-  niumTarget.style.top = (8 + Math.random()*maxY) + 'px';
-  niumTarget.style.transform = 'none';
+function updateScore(){
+ document.getElementById('time').textContent=timeLeft;
+ document.getElementById('score').textContent=score;
 }
-function endNiumGame(won){
-  stopNiumGame(); niumTarget.style.display = 'none';
-  document.getElementById('niumTitle').textContent = won ? 'チトセニウム共鳴！' : '星のかけらが消えていく…';
-  document.getElementById('niumIntro').textContent = won ? 'すごい！チトセニウムを安定化させた！' : 'あと少し！星の輝きは夜空へ帰っていった。';
-  document.getElementById('niumMessage').textContent = won ? '称号獲得：チトセニウム収集家 ✨' : `回収数 ${niumScore} 個。また挑戦してね！`;
-  document.getElementById('niumStart').textContent = 'もう一度遊ぶ';
+function spawnOre(){
+ const area=document.getElementById('gameArea');
+ if(timeLeft<=0)return;
+ const ore=document.createElement('button');
+ ore.className='ore';ore.type='button';ore.textContent='✦';
+ ore.setAttribute('aria-label','チトセニウムを集める');
+ ore.style.left=Math.random()*Math.max(0,area.clientWidth-62)+'px';
+ ore.style.top=Math.random()*Math.max(0,area.clientHeight-62)+'px';
+ ore.addEventListener('click',()=>{
+  if(timeLeft<=0)return;
+  score++;updateScore();ore.remove();spawnOre();
+ },{once:true});
+ area.appendChild(ore);
+ setTimeout(()=>{if(ore.isConnected){ore.remove();spawnOre()}},850);
 }
-function startNiumGame(){
-  stopNiumGame(); niumScore=0; niumTime=15; niumPlaying=true;
-  document.getElementById('niumScore').textContent='0';
-  document.getElementById('niumTime').textContent='15';
-  document.getElementById('niumMessage').textContent='光る結晶をすばやくタップ！';
-  document.getElementById('niumTitle').textContent='チトセニウムを集めろ！';
-  document.getElementById('niumIntro').textContent='15秒で10個集めたら成功！';
-  niumTarget.style.display='flex'; moveNiumTarget();
-  niumMover=setInterval(moveNiumTarget,850);
-  niumTimer=setInterval(()=>{
-    niumTime--; document.getElementById('niumTime').textContent=String(niumTime);
-    if(niumTime<=0) endNiumGame(niumScore>=10);
-  },1000);
-}
-niumTarget.addEventListener('click',()=>{
-  if(!niumPlaying) return;
-  niumScore++; document.getElementById('niumScore').textContent=String(niumScore);
-  if(niumScore>=10){endNiumGame(true);return;}
-  moveNiumTarget();
+document.getElementById('startGame').addEventListener('click',startGame);
+document.getElementById('retryGame').addEventListener('click',startGame);
+
+document.getElementById('shareBtn').addEventListener('click',async()=>{
+ const c=document.createElement('canvas');c.width=1200;c.height=900;
+ const g=c.getContext('2d');
+ const grad=g.createLinearGradient(0,0,1200,900);
+ grad.addColorStop(0,'#111b48');grad.addColorStop(1,'#080b20');
+ g.fillStyle=grad;g.fillRect(0,0,1200,900);
+ for(let i=0;i<180;i++){
+  g.fillStyle='rgba(255,255,255,'+(Math.random()*.8+.2)+')';
+  g.beginPath();g.arc(Math.random()*1200,Math.random()*900,Math.random()*2+0.5,0,Math.PI*2);g.fill();
+ }
+ g.textAlign='center';g.fillStyle='#fff2c7';g.font='bold 62px sans-serif';
+ g.fillText('俳句を作ろう',600,145);
+ g.fillStyle='#fff';g.font='bold 42px sans-serif';
+ const lines=document.getElementById('poem').textContent.split('\n');
+ lines.forEach((l,i)=>g.fillText(l,600,300+i*70));
+ g.fillStyle='#d8dcff';g.font='30px sans-serif';
+ g.fillText(document.getElementById('signature').textContent,900,500);
+ g.fillStyle='#ffdce9';g.font='bold 36px sans-serif';
+ document.getElementById('love').textContent.split('\n').forEach((l,i)=>g.fillText(l,600,610+i*58));
+ g.fillStyle='#aab5f4';g.font='22px sans-serif';
+ g.fillText('星空の下で、あなたの一句を。',600,820);
+ c.toBlob(async blob=>{
+  if(!blob)return;
+  const file=new File([blob],'haiku.png',{type:'image/png'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){
+   try{await navigator.share({files:[file],title:'俳句を作ろう',text:'一句できました！'});return}
+   catch(e){if(e.name==='AbortError')return}
+  }
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='haiku.png';a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  alert('画像を保存しました。Xなどに添付して共有できます。');
+ },'image/png');
 });
-document.getElementById('niumStart').addEventListener('click',startNiumGame);
-document.getElementById('niumClose').addEventListener('click',()=>{stopNiumGame();niumOverlay.classList.remove('open');});
-niumOverlay.addEventListener('click',e=>{if(e.target===niumOverlay){stopNiumGame();niumOverlay.classList.remove('open');}});
-
-document.getElementById('draw').addEventListener('click', draw);
-document.getElementById('authorName').addEventListener('keydown', e => { if(e.key === 'Enter') draw(); });
-document.getElementById('share').addEventListener('click', shareHaiku);
 </script>
 </body>
 </html>
